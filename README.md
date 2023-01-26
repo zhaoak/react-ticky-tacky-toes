@@ -17,5 +17,7 @@ It's two-player tic tac toe that you can play in your browser
 - `GameContext` - contains all state information on game (listed below)
     - `currentPlayer` - [string] - whose turn it is 
     - `gameStatus` - [string] - whether X or O has won/tied, set to `running` if game is running, otherwise `Xwin`, `Owin`, or `tie`
-    - `boardState` - [array, 9 strings] - state of game board, see wireframe for which index maps to which board square
-        - Possible values: `X`, `O`, or `""` for neither
+    - `boardState` - [array, 9 objects] - state of game board, see wireframe for which id maps to which board square
+        - Object structure:
+            - `ClaimedBy`: possible values: `X`, `O`, or `""` for neither
+            - `id`: which spot on the board--see diagram
