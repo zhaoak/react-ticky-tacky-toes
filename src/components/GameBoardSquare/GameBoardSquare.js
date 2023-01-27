@@ -10,11 +10,7 @@ export default function GameBoardSquare({ id }) {
     // if space already claimed, do nothing
     if (boardState[id].claimedBy === 'X' || boardState[id].claimedBy === 'O') return;
 
-    // now that we know space is empty and game is running,
-    // update text on square with player symbol
-    const squareLabel = document.getElementById(`square-${id}`);
-    squareLabel.textContent = currentPlayer;
-    // and claim space for player in state
+    // claim space for player in state
     claimByPlayer(id);
   }
 
