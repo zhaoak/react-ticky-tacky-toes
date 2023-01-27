@@ -1,3 +1,4 @@
+import './GameBoard.css';
 import GameBoardSquare from '../GameBoardSquare/GameBoardSquare.js';
 import { useGameContext } from '../../context/GameContext.js';
 
