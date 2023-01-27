@@ -82,6 +82,12 @@ const GameProvider = ({ children }) => {
     return true;
   }
 
+  function pickRandomPlayer() {
+    const val = Math.random() * 2;
+    if (val < 1) return 'X';
+    else return 'O';
+  }
+
   // actual game logic ===================================
   const checkForGameEnd = () => {
     // check if player who just moved made three in a row
@@ -109,6 +115,23 @@ const GameProvider = ({ children }) => {
     swapCurrentPlayer();
   };
 
+  const resetGame = () => {
+    setBoardState([
+      { id: 0, claimedBy: '' },
+      { id: 1, claimedBy: '' },
+      { id: 2, claimedBy: '' },
+      { id: 3, claimedBy: '' },
+      { id: 4, claimedBy: '' },
+      { id: 5, claimedBy: '' },
+      { id: 6, claimedBy: '' },
+      { id: 7, claimedBy: '' },
+      { id: 8, claimedBy: '' },
+    ]);
+    setGameStatus('running');
+    setCurrentPlayer(pickRandomPlayer());
+    console.log('game reset');
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -120,6 +143,7 @@ const GameProvider = ({ children }) => {
         boardState,
         setBoardState,
         claimByPlayer,
+        resetGame,
       }}
     >
       {children}
