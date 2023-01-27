@@ -3,19 +3,42 @@ import { createContext, useContext, useState } from 'react';
 const GameContext = createContext();
 const GameProvider = ({ children }) => {
   // state variables living in this context go here
-  const [currentPlayer, setCurrentPlayer] = useState('X'); // first player is randomized, this is a fallback
-  const [gameStatus, setGameStatus] = useState('running');
+  let [currentPlayer, setCurrentPlayer] = useState('X'); // first player is randomized, this is a fallback
+  let [gameStatus, setGameStatus] = useState('running');
   const [boardState, setBoardState] = useState([
-    { id: 0, claimedBy: '0' },
-    { id: 1, claimedBy: '1' },
-    { id: 2, claimedBy: '2' },
-    { id: 3, claimedBy: '3' },
-    { id: 4, claimedBy: '4' },
-    { id: 5, claimedBy: '5' },
-    { id: 6, claimedBy: '6' },
-    { id: 7, claimedBy: '7' },
-    { id: 8, claimedBy: '8' },
+    { id: 0, claimedBy: '' },
+    { id: 1, claimedBy: '' },
+    { id: 2, claimedBy: '' },
+    { id: 3, claimedBy: '' },
+    { id: 4, claimedBy: '' },
+    { id: 5, claimedBy: '' },
+    { id: 6, claimedBy: '' },
+    { id: 7, claimedBy: '' },
+    { id: 8, claimedBy: '' },
   ]);
+
+  function swapCurrentPlayer() {
+    currentPlayer === 'X' ? setCurrentPlayer('O') : setCurrentPlayer('X');
+  }
+
+  function updateBoardState(squareId, claimingPlayer) {
+    // copy boardState to tmp array
+    let tmp = boardState;
+    // iterate through tmp array, update desired square with claimingPlayer's mark
+    for (let square of tmp) {
+      if (square.id === squareId) {
+        square.claimedBy = claimingPlayer;
+      }
+    }
+    // overwrite boardState with the modified tmp array
+    setBoardState(tmp);
+  }
+
+  const claimByPlayer = (squareId) => {
+    console.log('square', squareId, ' claimed by ', currentPlayer);
+    updateBoardState(squareId, currentPlayer);
+    swapCurrentPlayer();
+  };
 
   return (
     <GameContext.Provider
@@ -27,6 +50,7 @@ const GameProvider = ({ children }) => {
         setGameStatus,
         boardState,
         setBoardState,
+        claimByPlayer,
       }}
     >
       {children}
