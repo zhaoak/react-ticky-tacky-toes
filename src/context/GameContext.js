@@ -17,6 +17,7 @@ const GameProvider = ({ children }) => {
     { id: 8, claimedBy: '' },
   ]);
 
+  // helper functions ==============================
   function swapCurrentPlayer() {
     currentPlayer === 'X' ? setCurrentPlayer('O') : setCurrentPlayer('X');
   }
@@ -34,9 +35,77 @@ const GameProvider = ({ children }) => {
     setBoardState(tmp);
   }
 
+  // scans boardState for three in a row with specific player symbol
+  function scanForWinningLines(playerSymbol) {
+    // all possible combos of three in a row on a 3x3 board by square ids
+    const winningLines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    // counts how many in a row match
+    let lineCounter = 0;
+
+    // scan through all possible winning lines
+    for (let line of winningLines) {
+      for (let square of line) {
+        // if square matches, increment counter, check next square in line
+        if (boardState[square].claimedBy === playerSymbol) {
+          lineCounter++;
+          // check if line is three in a row, if so that's a win
+          if (lineCounter >= 3) return true;
+          continue;
+        } else {
+          // if square doesn't match, check next line
+          lineCounter = 0;
+          break;
+        }
+      }
+    }
+    // if no lines, no win yet
+    return false;
+  }
+
+  function scanForTie() {
+    // iterate through whole game board
+    for (let square of boardState) {
+      // if any empty spaces, no tie yet
+      if (square.claimedBy === '') return false;
+    }
+    // if all spaces full, return true
+    return true;
+  }
+
+  // actual game logic ===================================
+  const checkForGameEnd = () => {
+    // check if player who just moved made three in a row
+    // checking for wins takes precedence over ties
+    if (scanForWinningLines(currentPlayer)) {
+      setGameStatus(`${currentPlayer}win`);
+      return true;
+    }
+
+    // check for tie
+    if (scanForTie()) {
+      setGameStatus('tie');
+      return true;
+    }
+
+    // otherwise game not over
+    return false;
+  };
+
   const claimByPlayer = (squareId) => {
-    console.log('square', squareId, ' claimed by ', currentPlayer);
     updateBoardState(squareId, currentPlayer);
+    if (checkForGameEnd()) {
+      console.log('game over:', gameStatus);
+    }
     swapCurrentPlayer();
   };
 
