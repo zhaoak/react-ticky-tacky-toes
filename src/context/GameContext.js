@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react';
 const GameContext = createContext();
 const GameProvider = ({ children }) => {
   // state variables living in this context go here
-  let [currentPlayer, setCurrentPlayer] = useState('X'); // first player is randomized, this is a fallback
+  let [currentPlayer, setCurrentPlayer] = useState(pickRandomPlayer());
   let [gameStatus, setGameStatus] = useState('running');
   const [boardState, setBoardState] = useState([
     { id: 0, claimedBy: '' },
@@ -17,7 +17,7 @@ const GameProvider = ({ children }) => {
     { id: 8, claimedBy: '' },
   ]);
 
-  // helper functions ==============================
+  // helper functions - not documented in readme, meant for internal use ==============================
   function swapCurrentPlayer() {
     currentPlayer === 'X' ? setCurrentPlayer('O') : setCurrentPlayer('X');
   }
@@ -35,7 +35,7 @@ const GameProvider = ({ children }) => {
     setBoardState(tmp);
   }
 
-  // scans boardState for three in a row with specific player symbol
+  // scans boardState for three in a row of a specific player symbol
   function scanForWinningLines(playerSymbol) {
     // all possible combos of three in a row on a 3x3 board by square ids
     const winningLines = [
@@ -103,19 +103,18 @@ const GameProvider = ({ children }) => {
       return true;
     }
 
-    // otherwise game not over
+    // if neither, game not over
     return false;
   };
 
   const claimByPlayer = (squareId) => {
     updateBoardState(squareId, currentPlayer);
-    if (checkForGameEnd()) {
-      console.log('game over:', gameStatus);
-    }
+    checkForGameEnd();
     swapCurrentPlayer();
   };
 
   const resetGame = () => {
+    // set to board to fully empty state
     setBoardState([
       { id: 0, claimedBy: '' },
       { id: 1, claimedBy: '' },
@@ -129,7 +128,6 @@ const GameProvider = ({ children }) => {
     ]);
     setGameStatus('running');
     setCurrentPlayer(pickRandomPlayer());
-    console.log('game reset');
   };
 
   return (

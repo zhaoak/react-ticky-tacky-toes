@@ -7,7 +7,7 @@ It's two-player tic tac toe that you can play in your browser
 
 ## Components
 - `App`
-  - `Message` - Displays message to players telling them whose turn it is, when win/lose/tie happens
+  - `Message` - Displays message to players telling them whose turn it is, as well as when win/lose/tie happens
   - `GameBoard` - Component containing game board itself, contains nine `GameBoardSquare`s
     - `GameBoardSquare` - Square on board, can display an X, an O, or nothing
   - `ResetGameButton` - resets game and all components to initial state
@@ -15,10 +15,6 @@ It's two-player tic tac toe that you can play in your browser
 ### Component functions
 #### Message
 - `setMessage()` - sets user-facing message to whatever it needs to be, based on `currentPlayer` and `gameStatus`
-
-#### ResetGameButton
-- `resetGame()` - triggered by clicking on reset game button; randomizes `currentPlayer`, blanks out `boardState`, sets `gameStatus` to `running`
-
 
 ## State
 ### Context
@@ -32,5 +28,6 @@ It's two-player tic tac toe that you can play in your browser
             - `id`: which spot on the board--see diagram
 
 #### Functions
-- `checkForGameEnd()` - checks if board state is a win/loss/tie, updates `gameStatus` if appropriate to do so, used in `useEffect` hook and called whenever `boardState` updates
-- `claimByPlayer(squareId)` - triggered by clicking on square: swaps `currentPlayer`, updates `boardState`
+- `checkForGameEnd()` - checks if board state is a win/loss/tie, updates `gameStatus` if appropriate to do so, called after each player move
+- `claimByPlayer(squareId)` - triggered by clicking on square: swaps `currentPlayer`, updates `boardState`, checks for game end
+- `resetGame()` - triggered by clicking on reset game button; randomizes `currentPlayer`, blanks out `boardState`, sets `gameStatus` to `running`
