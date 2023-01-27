@@ -1,0 +1,13 @@
+.board-square {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  border: thick double aqua;
+  background-color: cornflowerblue;
+}
+
+.board-square-text {
+  text-transform: uppercase;
+  font-size: 1.5rem;
+}
